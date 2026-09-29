@@ -1,5 +1,7 @@
 # Runpod接続
 
+初めての方は[READMEの初回認証手順](../../README.md#初回だけrunpodアカウントと認証の設定)から進めてください。APIキー作成、端末への一度だけの保存、接続確認を説明しています。
+
 ## 前提と認証
 
 利用者自身のRunpodアカウントと [公式runpodctl](https://github.com/runpod/runpodctl) が必要です。実測に使ったCLIは2.14.0。実行ファイルは同梱しません。
