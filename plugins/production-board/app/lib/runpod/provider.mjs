@@ -30,7 +30,7 @@ function pod(value) {
   const result = { id: value.id, name: value.name };
   if (['RUNNING', 'EXITED', 'TERMINATED', 'STOPPED'].includes(value.desiredStatus)) result.desiredStatus = value.desiredStatus;
   if (['running', 'initializing', 'stopped', 'terminated', 'unknown'].includes(value.runtimeStatus)) result.runtimeStatus = value.runtimeStatus;
-  if (Number.isFinite(value.costPerHr) && value.costPerHr >= 0) result.costPerHr = value.costPerHr;
+  const rate=value.costPerHr??value.cost; if (Number.isFinite(rate) && rate >= 0) result.costPerHr = rate;
   return result;
 }
 
@@ -75,7 +75,11 @@ export function createProvider({ binary, execFile = promisify(nodeExecFile) }) {
     const name = ownedName(plan?.runId);
     const p = plan.provision;
     if (plan.executionAuthorized !== true || !p || typeof p.gpuId !== 'string' || !p.gpuId.trim() || p.gpuId.length > 200 || /[\r\n\0]/.test(p.gpuId) || typeof p.image !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9./:@_-]{0,999}$/.test(p.image) || !Number.isSafeInteger(p.containerDiskInGb) || p.containerDiskInGb < 1 || p.containerDiskInGb > 100000 || !Number.isSafeInteger(p.volumeInGb) || p.volumeInGb < 0 || p.volumeInGb > 100000) throw new ProviderError('invalid_input');
-    const data = await invoke(['pod', 'create', '--name', name, '--gpu-id', p.gpuId, '--image', p.image, '--gpu-count', '1', '--container-disk-in-gb', String(p.containerDiskInGb), '--volume-in-gb', String(p.volumeInGb), '--output=json'], true);
+    const args=['pod','create','--name',name,'--gpu-id',p.gpuId,'--image',p.image,'--gpu-count','1','--container-disk-in-gb',String(p.containerDiskInGb),'--volume-in-gb',String(p.volumeInGb),'--ports','22/tcp','--output=json'];
+    if(p.publicKey!==undefined){if(typeof p.publicKey!=='string'||!/^ssh-(?:rsa|ed25519) [A-Za-z0-9+/=]+(?: [^\r\n]*)?$/.test(p.publicKey)||p.publicKey.length>20000)throw new ProviderError('invalid_input');args.push('--env',JSON.stringify({PUBLIC_KEY:p.publicKey}));}
+    if(p.countryCode!==undefined){if(!/^[A-Z]{2}$/.test(p.countryCode))throw new ProviderError('invalid_input');args.push('--country-code',p.countryCode);}
+    if(p.dataCenterIds!==undefined){if(!Array.isArray(p.dataCenterIds)||!p.dataCenterIds.length||!p.dataCenterIds.every(x=>typeof x==='string'&&/^[A-Z0-9-]{1,40}$/.test(x)))throw new ProviderError('invalid_input');args.push('--data-center-ids',p.dataCenterIds.join(','));}
+    const data=await invoke(args,true);
     try { return pod(data); } catch { throw new ProviderError('outcome_unknown', data?.id); }
   }
   async function terminate(id) {

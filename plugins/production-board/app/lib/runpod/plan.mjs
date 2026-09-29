@@ -39,15 +39,18 @@ async function fingerprint(workspace,relative,projectId){
  check(after.ino===stat.ino&&after.size===stat.size&&after.mtimeMs===stat.mtimeMs&&after.ctimeMs===stat.ctimeMs,'Input material changed while hashing');
  return {path:relative,sha256:hash.digest('hex'),sizeBytes:stat.size};
 }
-export async function createPlan({workspace,itemId,prompt,inputs,modelProfile,budgetUsd,maxHourlyUsd,deadlineAt,seed=0,operation='image'}){
+export async function createPlan({workspace,itemId,prompt,inputs,modelProfile,budgetUsd,maxHourlyUsd,deadlineAt,seed=0,operation='image',executionConfig}){
  const state=await board(workspace);
  const plan={schemaVersion:1,runId:randomUUID(),boardRevision:state.revision,projectId:state.project?.id,itemId,operation,modelProfile:structuredClone(modelProfile),inputs:Array.isArray(inputs)?inputs.map(input=>({path:typeof input==='string'?input:input?.path})):inputs,prompt,seed,budgetUsd,maxHourlyUsd,deadlineAt,cleanupPolicy:'terminate-owned-pod-after-recovery'};
+ if(executionConfig!==undefined){plan.executionConfig=structuredClone(executionConfig);const cfg=plan.executionConfig;check(cfg&&typeof cfg==='object'&&!Array.isArray(cfg),'Invalid execution config');if(cfg.graph){check(typeof cfg.graph==='string'&&!path.isAbsolute(cfg.graph)&&!cfg.graph.split(/[\\/]/).includes('..'),'Graph must be workspace relative');const root=await fs.realpath(workspace),file=await fs.realpath(path.join(root,cfg.graph));check(file.startsWith(root+path.sep),'Graph escapes workspace');cfg.graphSha256=createHash('sha256').update(await fs.readFile(file)).digest('hex');}}
  bounded(plan);check(state.items?.some(item=>item.id===itemId),'Unknown board item');
  plan.inputs=await Promise.all(plan.inputs.map(input=>fingerprint(workspace,input.path,plan.projectId)));
+ if(plan.executionConfig?.inputs){for(const i of plan.executionConfig.inputs){const source=plan.inputs.find(p=>p.path===i.source);check(source,'Execution input must reference an authorized plan input');i.sha256=source.sha256;}}
+
  await validatePlan({workspace,plan});return plan;
 }
 export async function validatePlan({workspace,plan}){
- bounded(plan);const state=await board(workspace);
+ bounded(plan);const cfg=plan.executionConfig;if(cfg?.inputs){check(Array.isArray(cfg.inputs),'Invalid execution inputs');for(const i of cfg.inputs){check(plan.inputs.some(p=>p.path===i.source&&p.sha256===i.sha256),'Execution input must match authorized plan input and hash');}}if(cfg?.graph){const root=await fs.realpath(workspace),file=await fs.realpath(path.join(root,cfg.graph));check(file.startsWith(root+path.sep),'Graph escapes workspace');check(createHash('sha256').update(await fs.readFile(file)).digest('hex')===cfg.graphSha256,'Graph changed; create a new plan');}const state=await board(workspace);
  check(state.revision===plan.boardRevision,'Board revision changed; create a new plan');
  check(state.project?.id===plan.projectId&&state.items?.some(item=>item.id===plan.itemId),'Project or board item changed');
  for(const input of plan.inputs){const actual=await fingerprint(workspace,input.path,plan.projectId);check(actual.sha256===input.sha256&&actual.sizeBytes===input.sizeBytes,'Input material changed; create a new plan');}

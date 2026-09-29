@@ -1,6 +1,6 @@
 # Production Board — Codex + Runpod
 
-ローカルで動画のシーン・素材・修正メモを確認し、Runpodでの制作を準備するCodex向け実験版プラグインです。**0.1.0-alpha.3**。
+ローカルで動画のシーン・素材・修正メモを確認し、Runpodでの制作を準備するCodex向け実験版プラグインです。**0.1.0-alpha.4**。
 
 ## できること
 
@@ -9,7 +9,7 @@
 - Runpod CLIと任意のローカルMCP接続で、同じAPIキーを使用。
 - 実行計画の検証、ローカル台帳、状態・レポート出力。
 
-CodexによるCLI・MCP・SSHの操作で、画像生成→動画生成→ローカル回収→Pod削除は実測済みです。ただし、プラグインの **`run / resume / cleanup` はまだ無効**です。ボードを開いただけでGPUは起動しません。[実測と制限](docs/VALIDATION.md) / [残作業](TODO.md)。
+CodexによるCLI・MCP・SSHの操作で、画像生成→動画生成→ローカル回収→Pod削除は実測済みです。alpha.4で **`run / resume / cleanup` を統合**しました。既定は課金なしのsimulateで、H3 liveは独立期限controllerが必要です。統合後の実機検証は未実施です。[実行手順](docs/EXECUTION.md)。ボードを開いただけでGPUは起動しません。[実測と制限](docs/VALIDATION.md) / [残作業](TODO.md)。
 
 ## Codex導入後の通常の使い方
 

@@ -59,3 +59,9 @@ test('incomplete initialization remains visible without hiding healthy runs',asy
  await assert.rejects(store.create(incompletePlan),/initialization incomplete.*recovery/i);
  assert.equal((await fs.stat(path.join(args.workspace,'board/runs',incompletePlan.runId))).isDirectory(),true);
 });
+
+test('record validation rejects execution inputs detached from plan fingerprints',async t=>{
+ const args=await fixture(t),plan=await createPlan({...args,executionConfig:{inputs:[{source:args.inputs[0],target:'ref.png'}]}});
+ assert.equal(await validatePlan({workspace:args.workspace,plan}),true);
+ plan.executionConfig.inputs[0].sha256='b'.repeat(64);await assert.rejects(validatePlan({workspace:args.workspace,plan}),/authorized plan/);
+});

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "production-board",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "Local production board and Runpod workflow preparation for Codex. Experimental alpha.",
   "author": {
     "name": "Production Board contributors"
@@ -17,7 +17,7 @@
       "interface": {
         "displayName": "Production Board",
         "shortDescription": "シーン・絵コンテ・素材をローカルで確認する制作ボード",
-        "longDescription": "シーン資料・素材・修正メモをローカルで確認し、Runpodの認証共有と実行計画を支援します。有料生成の一括実行は未実装です。",
+        "longDescription": "シーン資料・素材・修正メモをローカルで確認し、Runpodの認証共有と実行計画を支援します。H3のrun/resume/cleanupを試験実装しています。既定は模擬実行で、統合版の実機検証は未実施です。",
         "developerName": "Production Board contributors",
         "category": "Productivity",
         "capabilities": [],

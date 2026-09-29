@@ -18,3 +18,14 @@
 - Python regression tests reject old/dirty environments, missing packages, black/corrupt video, hash mismatch and wrong dimensions/count/rate; a visible encoded fixture passes.
 - Real failed black output rejected (exit 1), real successful 768p output accepted (141 frames, zero black frames).
 - Skill-driven execution must run both gates. Automatic cloud run/resume/cleanup remains disabled. Not a complete visual/audio quality evaluator or a hermetically locked GPU image.
+
+## alpha.4 lifecycle integration（2026-09-30）
+
+- H3単一動画のrun/resume/cleanup、永続intent、途中回収再開、独立期限controllerを実装。
+- 課金なしのCLI実行でrunを途中停止し、resumeで完了、cleanup再実行を確認。
+- 作成・投入の応答消失、重複コマンド、回収失敗、黒画面検査失敗、期限超過、削除失敗、素材変更を回帰テスト。
+- 既定simulate。liveはHTTPS期限controllerと明示的な承認指定が必要。controllerは未配置で、この統合コードの実機試験は未実施。
+- Qwen画像用アダプターは未統合。過去の画像生成実機検証と区別する。
+- 新しい課金リソースは作成していない。詳細・制限はplugins/production-board/docs/EXECUTION.md。
+
+最終ローカル検証：JavaScript 60テスト、Python 19テスト成功。TypeScript/Viteビルド、manifest・skill・パッケージ検査成功。

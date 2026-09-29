@@ -39,7 +39,7 @@ node scripts/runpod.mjs report --workspace /absolute/path/to/my-video --id RUN_U
 
 `plan` はJSONを標準出力へ返します。必要ならファイルへ保存し `record` に渡します。requestの必須項目は `itemId, prompt, inputs, modelProfile, budgetUsd, maxHourlyUsd, deadlineAt`。modelProfileには固定した `modelId, revision, imageDigest, runtime` が必要です。架空のdigestで検証を通さないでください。入力素材・ボードrevisionも検証します。詳細は `app/lib/runpod/plan.mjs`。
 
-`run/resume/cleanup` は無効です。内部providerのcreate関数は自動制作パイプラインではありません。MCPのインフラ操作は課金や削除を伴うため、操作内容と予算を理解した上で使用します。
+`run/resume/cleanup` の使い方は[実行手順](docs/EXECUTION.md)を参照してください。既定はsimulate。H3 liveは独立期限controllerと明示的な実行指定が必要で、統合後の実機検証は未実施です。MCPのインフラ操作は課金や削除を伴うため、操作内容と予算を理解した上で使用します。
 
 ## 実行前に把握する制限
 

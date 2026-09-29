@@ -24,4 +24,4 @@ This is a technical media check, not artistic acceptance: review first/middle/la
 
 Only after a passing pilot and visual review may an authorized multi-shot run continue. If the user requested one shot, recover it and immediately delete owned resources. Recover/hash each output before deletion, verify fresh Pod/volume listings, and record elapsed time plus estimated versus settled costs. On failure or exhausted budget, also clean up owned resources; do not keep a GPU alive awaiting a future turn.
 
-These commands are mandatory gates for the skill-driven manual path. Paid `run/resume/cleanup` orchestration remains disabled; future runners must call both gates before marking a shot complete.
+These commands are mandatory gates for the skill-driven manual path. The alpha.4 H3 runner calls both gates before marking a shot complete; see [execution](EXECUTION.md). Integrated live execution still requires separately budgeted verification.

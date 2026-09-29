@@ -1,6 +1,6 @@
 # Runpod Video Plugin
 
-Codexにmarketplaceから導入し、初回利用時にローカル制作ボードとRunpod接続をセットアップする実験版です。**0.1.0-alpha.3**。
+Codexにmarketplaceから導入し、初回利用時にローカル制作ボードとRunpod接続をセットアップする実験版です。**0.1.0-alpha.4**。
 
 ## インストール
 
@@ -69,7 +69,7 @@ Codexに「Runpodの初回認証が完了したので、接続を確認して」
 
 このプラグインはCLIだけでも利用でき、**MCPへの別ログインは必須ではありません**。任意の同梱MCPラッパーもCLIと同じAPIキーを読みます。公式RunpodのOAuth型MCPを別に追加すると、その接続には別の認可が必要です。両方の設定は不要です。詳細は[Runpod設定](plugins/production-board/RUNPOD.md)を参照してください。
 
-認証設定だけではGPUを作成しません。実際の生成時には利用可能な残高・支払い設定と予算が必要です。現在のalphaでは有料 `run/resume/cleanup` の一括実行は未実装です。
+認証設定だけではGPUを作成しません。実際の生成時には利用可能な残高・支払い設定と予算が必要です。alpha.4では `run/resume/cleanup` を実装しました。既定は課金なしの模擬実行で、liveは独立期限監視の設定が必要です。統合後の実機検証は未実施です。
 
 ## 現在の機能
 
@@ -77,7 +77,9 @@ Codexに「Runpodの初回認証が完了したので、接続を確認して」
 - 初回セットアップ、同一キーを使うRunpod CLI/任意MCP、ローカル実行計画と台帳。
 - 手動での画像・動画生成→回収→削除は実測済み。
 
-**有料生成の一括 `run/resume/cleanup` はまだ未実装**です。参考プラグインMiniMax-H3-Cloudと同じ生成機能が完成したという意味ではありません。
+**`run/resume/cleanup` の状態管理・H3単一動画アダプターを実装し、模擬テストで検証済み**です。既定はsimulate。liveには別ホストの期限controllerと明示的な実行指定が必要で、統合版の実機検証は未実施です。Qwen画像の自動実行は未統合です。
+
+[実行・再開・片付けの手順](plugins/production-board/docs/EXECUTION.md)
 
 ## ファイル構成
 

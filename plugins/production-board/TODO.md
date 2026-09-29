@@ -30,4 +30,12 @@
 - [x] 前回成功したComfyUI commitと推論依存の一致を確認する環境ゲート。
 - [x] 回収動画のSHA256・全フレーム復号・解像度・fps・フレーム数・黒画面検査。
 - [x] スキルの手動実行手順に両ゲートと失敗時のバッチ停止・片付けを必須化。
-- [ ] 将来の有料run/resume/cleanupへゲートを直接統合（現在コマンドは無効）。
+- [x] H3 run/resume/cleanupへゲートを統合（模擬テスト済み・統合版実機検証は未実施）。
+
+## alpha.4 lifecycle
+
+- [x] run/resume/cleanup、保存状態、操作前のintent、二重実行防止、復号・ハッシュ検査。
+- [x] 独立deadline controllerと同一runIdの再作成防止。
+- [x] H3単一動画のbootstrap・投入・回収アダプター。
+- [ ] controllerを別ホストへ配置し、新しい予算で統合版を実機検証。
+- [ ] Qwen画像用アダプターを同じライフサイクルに追加。

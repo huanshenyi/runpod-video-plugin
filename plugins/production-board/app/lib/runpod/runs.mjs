@@ -1,5 +1,6 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 const UUID=/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 function validId(id){if(typeof id!=='string'||!UUID.test(id))throw new Error('Invalid run ID');return id;}
@@ -24,13 +25,13 @@ export function createRunStore(workspace){
   const current=await load(validId(run?.runId));if(JSON.stringify(current.plan)!==JSON.stringify(run.plan))throw new Error('Run plan is immutable');
   const dir=await directory([run.runId]);const temporary=path.join(dir,`.run-${randomUUID()}.tmp`);
   const next={...run,schemaVersion:current.schemaVersion,runId:current.runId,createdAt:current.createdAt,updatedAt:new Date().toISOString()};
-  try{await fs.writeFile(temporary,JSON.stringify(next,null,2)+'\n',{flag:'wx',mode:0o600});await fs.rename(temporary,path.join(dir,'run.json'));}finally{await fs.rm(temporary,{force:true});}
+  try{const h=await fs.open(temporary,'wx',0o600);try{await h.writeFile(JSON.stringify(next,null,2)+'\n');await h.sync();}finally{await h.close();}await fs.rename(temporary,path.join(dir,'run.json'));const dh=await fs.open(dir,'r');try{await dh.sync();}finally{await dh.close();}}finally{await fs.rm(temporary,{force:true});}
   return next;
  }
  async function withLock(runId,work){
   const dir=await directory([validId(runId)]);const lock=path.join(dir,'.lock');
   let handle;try{handle=await fs.open(lock,'wx',0o600);}catch(e){if(e.code==='EEXIST')throw new Error('Run is locked; inspect owner before manual recovery');throw e;}
-  try{await handle.writeFile(JSON.stringify({pid:process.pid,createdAt:new Date().toISOString()}));return await work();}finally{await handle.close();await fs.unlink(lock);}
+  try{try{await fs.lstat(path.join(dir,'.recover-lock'));throw new Error('Run is locked for recovery');}catch(e){if(e.code!=='ENOENT')throw e;}await handle.writeFile(JSON.stringify({pid:process.pid,hostname:os.hostname(),createdAt:new Date().toISOString()}));await handle.sync();return await work();}finally{await handle.close();await fs.unlink(lock);}
  }
  async function create(plan){
   const runId=validId(plan?.runId);if(plan.schemaVersion!==1)throw new Error('Invalid plan schema');
@@ -55,5 +56,15 @@ export function createRunStore(workspace){
    }
    return load(runId);
   }));}
- return {create,load,save,withLock,list};
+ async function recoverLock(runId){
+  const dir=await directory([validId(runId)]),guard=path.join(dir,'.recover-lock'),lock=path.join(dir,'.lock');
+  const h=await fs.open(guard,'wx',0o600);
+  try{
+   let owner;try{owner=JSON.parse(await fs.readFile(lock,'utf8'));}catch(e){if(e.code==='ENOENT')return {unlocked:false};throw e;}
+   if(owner.hostname!==os.hostname()||!Number.isSafeInteger(owner.pid)||owner.pid<1)throw Error('Unknown lock owner; manual inspection required');
+   try{process.kill(owner.pid,0);throw Error('Lock owner is still alive');}catch(e){if(e.code!=='ESRCH')throw e;}
+   await fs.unlink(lock);return {unlocked:true};
+  }finally{await h.close();await fs.unlink(guard);}
+ }
+ return {create,load,save,withLock,list,recoverLock};
 }

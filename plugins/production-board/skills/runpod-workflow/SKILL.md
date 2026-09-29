@@ -15,7 +15,7 @@ Use the returned `runtime` and script paths for all subsequent commands, not the
 
 If runpod reports `binary_missing`, install the official runpodctl for the user's OS using current official instructions (use an available official Runpod skill). Respect execution permissions; do not request or print an API key in chat. If authentication is missing, guide the user through `runpodctl doctor` using a local interactive terminal; if credentials already work, skip it. Re-run diagnose after setup. The board can still be used while Runpod is unconfigured. MCP is optional; CLI is sufficient and uses the same credential source.
 
-After setup, start the returned board script with `start --workspace <workspace> --port 4317` in a kept foreground session and open its localhost URL. Source preparation is automatic; users need not run npm commands themselves. If a board already exists, preserve it. Do not convert first-use setup into a paid generation request. `run/resume/cleanup` remain unavailable in this alpha.
+After setup, start the returned board script with `start --workspace <workspace> --port 4317` in a kept foreground session and open its localhost URL. Source preparation is automatic; users need not run npm commands themselves. If a board already exists, preserve it. Do not convert first-use setup into a paid generation request. `run/resume/cleanup` default to simulation; read the execution guide before any live action.
 
 ## Authentication and preparation
 
@@ -25,7 +25,7 @@ After the board is saved, use `node <plugin-root>/scripts/runpod.mjs diagnose --
 
 ## Execution boundary
 
-`run`, `resume`, and `cleanup` are intentionally disabled. Do not imply that a local plan started a GPU or that cleanup happened automatically. See [the validation note](../../docs/VALIDATION.md) for the manually verified path and [example graphs](../../examples/workflows/README.md) for model-specific references.
+`run`, `resume`, and `cleanup` are implemented with a default non-billable simulation mode. Read [the execution guide](../../docs/EXECUTION.md). Live H3 requires a separately hosted HTTPS deadline controller, pinned image digest, driver preflight, and explicit `--mode live --authorize true` within the user-approved budget. Never switch a simulated run to live. Integrated live execution remains unverified; do not describe the offline tests as paid validation. Do not imply that a local plan started a GPU or that cleanup happened automatically. See [the validation note](../../docs/VALIDATION.md) for the manually verified path and [example graphs](../../examples/workflows/README.md) for model-specific references.
 
 If the user explicitly requests a paid manual run, use available official Runpod tools/skills and current CLI help. Honor the session's existing authorization and budget. Before creation, record the price, deadline and existing resources. Immediately persist returned IDs and verify assigned GPU/location/price before model transfer. On an uncertain creation response, reconcile before retrying; names alone do not establish ownership.
 
@@ -35,4 +35,4 @@ Read model licenses and choose an eligible deployment region. Keep credentials o
 
 ## Mandatory H3 execution gates
 
-Before any manual H3 generation, read [the verified H3 run procedure](../../docs/H3-VERIFIED-RUN.md). Run `scripts/h3-guard.py environment` on the Pod before submitting prompts; reject an old/mismatched runtime. Node availability alone is insufficient. After recovery run `scripts/h3-guard.py video` with the remote SHA256 and planned dimensions/frame count. Nonzero exits stop the batch and mark the attempt validation_failed, never complete. Review the pilot visually before continuing; API success is not media success. Follow the cleanup procedure on both success and failure. These checks do not enable the disabled cloud orchestration commands.
+Before any manual H3 generation, read [the verified H3 run procedure](../../docs/H3-VERIFIED-RUN.md). Run `scripts/h3-guard.py environment` on the Pod before submitting prompts; reject an old/mismatched runtime. Node availability alone is insufficient. After recovery run `scripts/h3-guard.py video` with the remote SHA256 and planned dimensions/frame count. Nonzero exits stop the batch and mark the attempt validation_failed, never complete. Review the pilot visually before continuing; API success is not media success. Follow the cleanup procedure on both success and failure. The integrated H3 runner calls these checks; manual runs must also follow them.

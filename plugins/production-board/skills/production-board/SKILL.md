@@ -15,7 +15,7 @@ Use the returned `runtime` and script paths for all subsequent commands, not the
 
 If runpod reports `binary_missing`, install the official runpodctl for the user's OS using current official instructions (use an available official Runpod skill). Respect execution permissions; do not request or print an API key in chat. If authentication is missing, guide the user through `runpodctl doctor` using a local interactive terminal; if credentials already work, skip it. Re-run diagnose after setup. The board can still be used while Runpod is unconfigured. MCP is optional; CLI is sufficient and uses the same credential source.
 
-After setup, start the returned board script with `start --workspace <workspace> --port 4317` in a kept foreground session and open its localhost URL. Source preparation is automatic; users need not run npm commands themselves. If a board already exists, preserve it. Do not convert first-use setup into a paid generation request. `run/resume/cleanup` remain unavailable in this alpha.
+After setup, start the returned board script with `start --workspace <workspace> --port 4317` in a kept foreground session and open its localhost URL. Source preparation is automatic; users need not run npm commands themselves. If a board already exists, preserve it. Do not convert first-use setup into a paid generation request. `run/resume/cleanup` default to simulation; read the execution guide before any live action.
 
 ## Start
 
