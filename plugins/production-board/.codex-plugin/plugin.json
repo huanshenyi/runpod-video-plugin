@@ -1,0 +1,21 @@
+{
+  "name": "production-board",
+  "version": "0.1.0-alpha.3",
+  "description": "Local production board and Runpod workflow preparation for Codex. Experimental alpha.",
+  "author": {
+    "name": "Production Board contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Production Board",
+    "shortDescription": "シーン・絵コンテ・素材をローカルで確認する制作ボード",
+    "longDescription": "シーン資料・素材・修正メモをローカルで確認し、Runpodの認証共有と実行計画を支援します。有料生成の一括実行は未実装です。",
+    "developerName": "Production Board contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "制作ボードを初期化して開いてください。",
+      "Runpod接続とローカル実行計画を確認してください。"
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "451": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "452": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "prompt": "A wide cinematic anime illustration of an original adult woman mage in her late twenties standing in the courtyard of an ancient magic academy. She has shoulder-length silver hair, calm amber eyes, a navy blue traveling cloak over an elegant ivory tunic, leather boots, and a carved wooden staff with a softly glowing turquoise crystal. Her full figure is placed in the left third of the frame, facing toward the distant academy entrance. Weathered pale stone paving, a circular fountain, ivy-covered Gothic arcades, tall arched windows, and slender towers establish a spacious courtyard. A few luminous blue motes drift around her raised hand. Golden morning sunlight enters from the upper right, casting long soft shadows across the paving. Distant mountains and delicate clouds appear beyond the towers. Refined clean linework, expressive cel shading, richly painted architectural backgrounds, coherent perspective, serene atmosphere, balanced scenic composition. No text, no logo, no watermark.",
+      "negative_prompt": "",
+      "resolution": 1024,
+      "clip": [
+        "453",
+        0
+      ]
+    }
+  },
+  "453": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "454": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    }
+  },
+  "456": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 576,
+      "batch_size": 1
+    }
+  },
+  "457": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "458",
+        0
+      ],
+      "vae": [
+        "454",
+        0
+      ]
+    }
+  },
+  "458": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 447606998181262,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "480",
+        0
+      ],
+      "positive": [
+        "452",
+        0
+      ],
+      "negative": [
+        "452",
+        1
+      ],
+      "latent_image": [
+        "456",
+        0
+      ]
+    }
+  },
+  "480": {
+    "class_type": "QwenImage21Cache",
+    "inputs": {
+      "device": "auto",
+      "dtype": "default",
+      "model": [
+        "451",
+        0
+      ]
+    }
+  },
+  "461": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "457",
+        0
+      ],
+      "filename_prefix": "runpod-validation/qwen21-mage-academy"
+    }
+  }
+}

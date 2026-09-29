@@ -1,0 +1,20 @@
+{
+  "name": "production-board-cloud",
+  "interface": {
+    "displayName": "Production Board Cloud"
+  },
+  "plugins": [
+    {
+      "name": "production-board",
+      "source": {
+        "source": "local",
+        "path": "./plugins/production-board"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
