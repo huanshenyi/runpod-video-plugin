@@ -1,0 +1,4 @@
+interface:
+  display_name: "MiniMax H3 Prompt Writing"
+  short_description: "Draft H3 video prompts from scenes and keyframes"
+  default_prompt: "Use $h3-prompt-writing to draft a MiniMax H3 prompt from this scene and its selected images, preserving the original dialogue."

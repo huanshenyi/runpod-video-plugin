@@ -33,6 +33,10 @@ Budget includes startup, downloads, idle time, compute, storage, and recovery. L
 
 Read model licenses and choose an eligible deployment region. Keep credentials off the GPU where practical. Media and prompts sent to a Pod leave the local machine; use only the inputs authorized for that run.
 
+## H3 prompt preparation
+
+For scene-to-prompt drafting or revisions, use the bundled [H3 prompt writing skill](../h3-prompt-writing/SKILL.md). Preserve the approved prompt exactly between plan and graph. Drafting does not authorize a paid run or add support for reference modes.
+
 ## Mandatory H3 execution gates
 
 Before any manual H3 generation, read [the verified H3 run procedure](../../docs/H3-VERIFIED-RUN.md). Run `scripts/h3-guard.py environment` on the Pod before submitting prompts; reject an old/mismatched runtime. Node availability alone is insufficient. After recovery run `scripts/h3-guard.py video` with the remote SHA256 and planned dimensions/frame count. Nonzero exits stop the batch and mark the attempt validation_failed, never complete. Review the pilot visually before continuing; API success is not media success. Follow the cleanup procedure on both success and failure. The integrated H3 runner calls these checks; manual runs must also follow them.

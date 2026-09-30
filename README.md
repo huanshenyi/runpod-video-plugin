@@ -1,6 +1,6 @@
 # Runpod Video Plugin
 
-Codexにmarketplaceから導入し、初回利用時にローカル制作ボードとRunpod接続をセットアップする実験版です。**0.1.0-alpha.4**。
+Codexにmarketplaceから導入し、初回利用時にローカル制作ボードとRunpod接続をセットアップする実験版です。**0.1.0-alpha.5**。
 
 ## インストール
 
@@ -107,3 +107,11 @@ marketplace名は `production-board-cloud`、plugin名は `production-board`。G
 - [公開手順](PUBLISHING.md)
 
 [参考にした導入方式](https://github.com/Sac-Y/MiniMax-H3-Cloud) / [Codex公式パッケージ文書](https://developers.openai.com/plugins/build/plugins)。参考リポジトリのコードはコピーしていません。
+
+## MiniMax H3プロンプトの作成
+
+alpha.5から [h3-prompt-writing](plugins/production-board/skills/h3-prompt-writing/SKILL.md) を同梱しています。別のスキル導入やRunpod認証なしで、シーン・選択画像・日本語セリフからH3用プロンプトを作れます。
+
+> このシーンと開始画像から、MiniMax H3用のプロンプトを作って。セリフは日本語のまま、動画生成はまだしないで。
+
+開始画像（I2VA）・開始/終了画像（FL2VA）の手順、時間配分、音声指定、例を内包しています。T2VA・L2VA・Ref2VAは草案作成のみで、現在の統合runnerでは実行できません。生成を依頼した場合は既存のRunpod実行手順へ引き継ぎます。プロンプト作成だけでGPUは起動しません。
