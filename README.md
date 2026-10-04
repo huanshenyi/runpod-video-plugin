@@ -2,6 +2,8 @@
 
 Codexにmarketplaceから導入し、初回利用時にローカル制作ボードとRunpod接続をセットアップする実験版です。**0.1.0-alpha.5**。
 
+[最新の実装・検証状況](plugins/production-board/docs/CURRENT-STATUS.md)。旧版や手動検証との違いを確認してください。
+
 ## インストール
 
 GitHubリポジトリ名は `runpod-video-plugin` です。公開先は `huanshenyi/runpod-video-plugin` です。
@@ -79,7 +81,7 @@ Codexに「Runpodの初回認証が完了したので、接続を確認して」
 
 **`run/resume/cleanup` の状態管理・H3単一動画アダプターを実装し、模擬テストで検証済み**です。既定はsimulate。liveには別ホストの期限controllerと明示的な実行指定が必要で、統合版の実機検証は未実施です。Qwen画像の自動実行は未統合です。
 
-[実行・再開・片付けの手順](plugins/production-board/docs/EXECUTION.md)
+[実行・再開・片付けの手順](plugins/production-board/docs/EXECUTION.md) / [期限監視のセットアップ](plugins/production-board/docs/DEADLINE-SETUP.md)
 
 ## ファイル構成
 

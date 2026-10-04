@@ -1,5 +1,7 @@
 # Independent deadline controller
 
+初回導入は [期限監視セットアップ](DEADLINE-SETUP.md) を参照してください。配置ファイルの生成と接続診断を利用できます。
+
 The controller must run on a separate, continuously available host with durable storage and a process supervisor. Running it on the production Mac does not protect against that Mac shutting down. This repository supplies the service code; installation does not deploy or configure a cloud service.
 
 ## Deployment
